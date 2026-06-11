@@ -105,7 +105,7 @@ export function ExerciseSeeder() {
             poses:      processedPoses,
             gifDataUrl: spriteUrl,
           });
-          console.info('[PoseFlow] Demo: landmarks actualizados con MediaPipe.');
+          console.info('[FisicTech] Demo: landmarks actualizados con MediaPipe.');
         } else {
           // Crear ejercicio nuevo con datos reales
           store.addExercise({
@@ -113,13 +113,13 @@ export function ExerciseSeeder() {
             poses:      processedPoses,
             gifDataUrl: spriteUrl,
           });
-          console.info('[PoseFlow] Demo: ejercicio creado con landmarks reales.');
+          console.info('[FisicTech] Demo: ejercicio creado con landmarks reales.');
         }
 
         setProgress(100);
         setStatus('done');
       } catch (err) {
-        console.warn('[PoseFlow] Demo seeder: no se pudo procesar con MediaPipe.', err);
+        console.warn('[FisicTech] Demo seeder: no se pudo procesar con MediaPipe.', err);
         // Fallback: crear ejercicio sin landmarks (modo degradado)
         try {
           if (!existing) {

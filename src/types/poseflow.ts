@@ -1,5 +1,5 @@
 /**
- * Tipos de dominio de PoseFlow — Módulo 1 (Instructor) y Módulo 2 (Alumno)
+ * Tipos de dominio de FisicTech — Módulo 1 (Instructor) y Módulo 2 (Alumno)
  *
  * Umbral de precisión por defecto: 85 % (margen de error 15 %)
  */

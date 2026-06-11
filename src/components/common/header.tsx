@@ -27,7 +27,7 @@ export function Header() {
             <Activity className="w-4 h-4 text-white" strokeWidth={2.5} />
           </div>
           <span className="font-black text-white tracking-tight">
-            Pose<span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">Flow</span>
+            Fisic<span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">Tech</span>
           </span>
         </Link>
 

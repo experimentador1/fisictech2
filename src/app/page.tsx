@@ -37,9 +37,9 @@ export default function Home() {
 
         <div className="relative container max-w-5xl mx-auto px-4 pt-20 pb-20 text-center">
           <h1 className="text-6xl md:text-8xl font-black leading-none tracking-tight mb-5">
-            Pose
+            Fisic
             <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-              Flow
+              Tech
             </span>
           </h1>
 

@@ -45,7 +45,7 @@ export const APERTURA_BRAZOS_TEMPLATE: Omit<Exercise, 'id' | 'createdAt' | 'upda
   transitionTime: 3,
   published: true,
   precisionThreshold: PRECISION_THRESHOLD,
-  createdBy: 'Demo PoseFlow',
+  createdBy: 'Demo FisicTech',
   poses: [
     {
       id: 'demo-pose-1',

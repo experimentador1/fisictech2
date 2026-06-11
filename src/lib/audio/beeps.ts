@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Web Audio API - Señales auditivas para PoseFlow
+ * Web Audio API - Señales auditivas para FisicTech
  *
  * Tres tipos de beeps:
  *  - countdown: tic durante cuenta regresiva (3-2-1)

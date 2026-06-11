@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EDUC FISICA - Plataforma Educativa",
-  description: "Plataforma moderna para la educación física desarrollada con Next.js 15, TypeScript y Tailwind CSS",
-  keywords: ["educación física", "Next.js", "TypeScript", "React", "Tailwind CSS"],
-  authors: [{ name: "EDUC FISICA Team" }],
-  creator: "EDUC FISICA",
+  title: "FisicTech - Plataforma Educativa",
+  description: "Plataforma de entrenamiento inteligente con detección de poses en tiempo real mediante visión por computadora.",
+  keywords: ["educación física", "pilates", "detección de poses", "Next.js", "TypeScript", "MediaPipe"],
+  authors: [{ name: "FisicTech" }],
+  creator: "FisicTech",
 };
 
 export default function RootLayout({

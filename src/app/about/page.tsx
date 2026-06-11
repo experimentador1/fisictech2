@@ -50,7 +50,7 @@ export default function AboutPage() {
             <Activity className="w-7 h-7 text-white" strokeWidth={2.5} />
           </div>
           <h1 className="text-4xl md:text-5xl font-black">
-            Acerca de <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">PoseFlow</span>
+            Acerca de <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">FisicTech</span>
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
             Plataforma de entrenamiento inteligente de pilates con detección de poses en tiempo real
