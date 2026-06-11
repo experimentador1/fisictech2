@@ -1,38 +1,43 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+
+const NAV_LINKS = [
+  { href: '/', label: 'Inicio' },
+  { href: '/training', label: '🎓 Entrenamiento' },
+  { href: '/evaluation', label: '📷 Evaluación' },
+  { href: '/sessions', label: '📊 Sesiones' },
+];
 
 export function Header() {
+  const pathname = usePathname();
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 hidden md:flex">
-          <Link className="mr-6 flex items-center space-x-2" href="/">
-            <span className="hidden font-bold sm:inline-block">EDUC FISICA</span>
-          </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-gray-950/90 backdrop-blur">
+      <div className="container max-w-6xl mx-auto flex h-14 items-center px-4">
+        <Link href="/" className="mr-8 flex items-center gap-2">
+          <span className="text-xl">🤸</span>
+          <span className="font-bold text-white">EDUC FÍSICA</span>
+        </Link>
+
+        <nav className="flex items-center gap-1">
+          {NAV_LINKS.map(link => (
             <Link
-              className="transition-colors hover:text-foreground/80 text-foreground"
-              href="/about"
+              key={link.href}
+              href={link.href}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+                pathname === link.href
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+              )}
             >
-              Acerca de
+              {link.label}
             </Link>
-            <Link
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-              href="/contact"
-            >
-              Contacto
-            </Link>
-          </nav>
-        </div>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            <Button variant="outline" size="sm">
-              Iniciar Sesión
-            </Button>
-          </div>
-        </div>
+          ))}
+        </nav>
       </div>
     </header>
   );

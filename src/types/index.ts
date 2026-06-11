@@ -1,11 +1,12 @@
-// Common types used throughout the application
+export * from './mediapipe';
 
 export interface User {
   id: string;
   name: string;
   email: string;
-  createdAt: Date;
-  updatedAt: Date;
+  role: 'teacher' | 'student' | 'admin';
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ApiResponse<T> {
@@ -14,7 +15,10 @@ export interface ApiResponse<T> {
   success: boolean;
 }
 
-export interface PageProps {
-  params: { [key: string]: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 }
