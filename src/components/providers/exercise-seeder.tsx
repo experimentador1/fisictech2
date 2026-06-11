@@ -53,7 +53,7 @@ export function ExerciseSeeder() {
         // Convertir las URLs públicas a dataUrls comprimidos para MediaPipe y storage
         const dataUrls: string[] = [];
         for (let i = 0; i < DEMO_IMAGE_URLS.length; i++) {
-          const url = DEMO_IMAGE_URLS[i];
+          const url = DEMO_IMAGE_URLS[i]!;
           const res = await fetch(url);
           const blob = await res.blob();
           const rawDataUrl = await new Promise<string>((resolve, reject) => {
