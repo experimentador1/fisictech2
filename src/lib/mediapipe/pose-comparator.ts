@@ -6,6 +6,7 @@ import {
   PoseEvaluation,
   ReferencePose,
 } from '@/types/mediapipe';
+import { PRECISION_THRESHOLD, ADJUST_THRESHOLD } from '@/types/poseflow';
 import { extractJointAngles } from './angle-calculator';
 
 // ============================================================
@@ -118,22 +119,24 @@ export function evaluateJointAngles(
     const tolerance = tolerances[joint] ?? 15;
     const diff = Math.abs(currentAngle - targetAngle);
 
-    let status: JointStatus;
-    if (diff <= tolerance) status = 'correct';
-    else if (diff <= tolerance * 1.8) status = 'adjust';
-    else status = 'incorrect';
+      // Escala inversa: tolerance → PRECISION_THRESHOLD; tolerance*2 → ADJUST_THRESHOLD
+      const jointScore = Math.max(0, 100 - (diff / tolerance) * (100 - PRECISION_THRESHOLD) * (100 / PRECISION_THRESHOLD));
 
-    const score = Math.max(0, 100 - (diff / tolerance) * 50);
-    totalScore += score;
-    count++;
+      let status: JointStatus;
+      if (diff <= tolerance) status = 'correct';
+      else if (diff <= tolerance * ((100 - ADJUST_THRESHOLD) / (100 - PRECISION_THRESHOLD))) status = 'adjust';
+      else status = 'incorrect';
 
-    (jointFeedback as Record<string, JointFeedback>)[joint] = {
-      status,
-      currentAngle: Math.round(currentAngle),
-      targetAngle: Math.round(targetAngle),
-      difference: Math.round(diff),
-      score: Math.round(score),
-    };
+      totalScore += jointScore;
+      count++;
+
+      (jointFeedback as Record<string, JointFeedback>)[joint] = {
+        status,
+        currentAngle: Math.round(currentAngle),
+        targetAngle: Math.round(targetAngle),
+        difference: Math.round(diff),
+        score: Math.round(jointScore),
+      };
   }
 
   return {

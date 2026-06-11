@@ -1,144 +1,173 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import {
+  ArrowRight, Dumbbell, Camera, CheckCircle2,
+} from 'lucide-react';
+import { PRECISION_THRESHOLD } from '@/types/poseflow';
 
-const FEATURES = [
-  {
-    icon: '🎓',
-    title: 'Entrenamiento',
-    description:
-      'Captura poses de referencia con tu cámara. MediaPipe extrae los 33 landmarks del cuerpo y calcula ángulos articulares automáticamente.',
-    href: '/training',
-    color: 'border-purple-700 hover:border-purple-500',
-    badge: 'Para maestros',
-  },
-  {
-    icon: '📷',
-    title: 'Evaluación en Tiempo Real',
-    description:
-      'Compara tu pose con la referencia del maestro. Retroalimentación visual inmediata con puntuación por articulación.',
-    href: '/evaluation',
-    color: 'border-blue-700 hover:border-blue-500',
-    badge: 'Para estudiantes',
-  },
-  {
-    icon: '📊',
-    title: 'Historial de Sesiones',
-    description:
-      'Visualiza el progreso a lo largo del tiempo. Gráficas de evolución del score y estadísticas detalladas por articulación.',
-    href: '/sessions',
-    color: 'border-green-700 hover:border-green-500',
-    badge: 'Seguimiento',
-  },
+const MODULE1_FEATURES = [
+  'Sube imágenes JPG/PNG de poses (1–20 por ejercicio)',
+  'MediaPipe extrae 33 landmarks 3D en modo IMAGE',
+  'Calcula ángulos articulares automáticamente',
+  'Configura tiempo de pose (5–120 s) y transición (1–10 s)',
+  'Genera JSON exportable para el Módulo 2',
+  'CRUD completo de ejercicios',
 ];
 
-const TECH_STACK = [
-  { label: 'MediaPipe Pose Landmarker', description: '33 landmarks 3D en tiempo real (~35ms/frame)' },
-  { label: 'WebAssembly + WebGL', description: 'Procesamiento 100% en el navegador, sin servidores de video' },
-  { label: 'Next.js 15 + TypeScript', description: 'App Router, Server Components, tipado estricto' },
-  { label: 'Comparación de Poses', description: 'Ángulos articulares + similitud euclidiana normalizada' },
-  { label: 'FastAPI Backend', description: 'API REST para persistencia de poses y sesiones' },
-  { label: 'Privacidad por Diseño', description: 'El video nunca sale del dispositivo del usuario' },
+const MODULE2_FEATURES = [
+  'Activación de webcam con permisos del navegador',
+  'Detección en tiempo real a ≥ 15 FPS',
+  'Comparación frame‑a‑frame vs. referencia del instructor',
+  `Score dinámico 0–100 % con umbral de ${PRECISION_THRESHOLD} %`,
+  'Overlay verde / amarillo / rojo por articulación',
+  'Beeps de transición (Web Audio API) + temporizador',
+  'Reporte post‑sesión con gráficas',
 ];
+
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Hero */}
-      <section className="container max-w-6xl mx-auto px-4 pt-20 pb-16 text-center">
-        <div className="inline-flex items-center gap-2 bg-blue-950/50 border border-blue-800 rounded-full px-4 py-1.5 text-sm text-blue-300 mb-8">
-          <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-          Powered by MediaPipe · Procesamiento en tiempo real
+
+      {/* ── Hero ──────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden">
+        {/* Ambient glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-600/10 blur-[120px] rounded-full" />
         </div>
 
-        <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6">
-          Evaluación de Poses
-          <br />
-          <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            con Inteligencia Artificial
-          </span>
-        </h1>
+        <div className="relative container max-w-5xl mx-auto px-4 pt-20 pb-20 text-center">
+          <h1 className="text-6xl md:text-8xl font-black leading-none tracking-tight mb-5">
+            Pose
+            <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              Flow
+            </span>
+          </h1>
 
-        <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-          Plataforma de educación física que usa visión por computadora para
-          detectar, comparar y evaluar poses de pilates y yoga en tiempo real.
-        </p>
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Plataforma de entrenamiento inteligente de pilates con detección de poses en tiempo real mediante visión por computadora.
+          </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" asChild>
-            <Link href="/evaluation">Iniciar Evaluación →</Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="/training">Crear Poses de Referencia</Link>
-          </Button>
-        </div>
-      </section>
-
-      {/* Módulos */}
-      <section className="container max-w-6xl mx-auto px-4 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {FEATURES.map(feature => (
+          {/* CTA buttons — área previamente marcada con plumón */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              key={feature.href}
-              href={feature.href}
-              className={`block rounded-2xl border bg-gray-900 p-6 transition-all duration-200 ${feature.color}`}
+              href="/evaluation"
+              className="group inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30"
             >
-              <div className="flex items-start justify-between mb-4">
-                <span className="text-4xl">{feature.icon}</span>
-                <span className="text-xs px-2 py-1 rounded-full bg-gray-800 text-gray-400 border border-gray-700">
-                  {feature.badge}
-                </span>
-              </div>
-              <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">{feature.description}</p>
+              <Camera className="w-4 h-4" strokeWidth={2} />
+              Módulo de Alumnos
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
             </Link>
-          ))}
+
+            <Link
+              href="/training"
+              className="inline-flex items-center gap-2.5 bg-white/[0.06] hover:bg-white/[0.10] active:bg-white/[0.04] text-gray-200 font-semibold px-6 py-3 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer"
+            >
+              <Dumbbell className="w-4 h-4" strokeWidth={2} />
+              Módulo de Lecciones
+            </Link>
+          </div>
+
         </div>
       </section>
 
-      {/* Cómo funciona */}
-      <section className="container max-w-6xl mx-auto px-4 pb-16">
-        <h2 className="text-2xl font-bold text-center mb-8 text-gray-200">
-          Arquitectura Técnica
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {TECH_STACK.map((item, i) => (
-            <div
-              key={i}
-              className="bg-gray-900 rounded-xl border border-gray-800 p-4"
-            >
-              <p className="font-semibold text-white text-sm">{item.label}</p>
-              <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+      {/* ── 4 poses de demo ───────────────────────────────────── */}
+      <section className="container max-w-4xl mx-auto px-4 pb-16">
+        <div className="text-center mb-6">
+          <p className="text-xs text-gray-500 uppercase tracking-widest font-medium mb-1">
+            Ejercicio de demo &middot; Módulo 1 ya cargado
+          </p>
+          <h2 className="text-2xl font-bold text-white">Apertura de Brazos (Pilates)</h2>
+          <p className="text-gray-500 text-sm mt-1">
+            4 poses de referencia &middot; posición supina &middot; {PRECISION_THRESHOLD} % umbral de precisión
+          </p>
+        </div>
+
+        <div className="grid grid-cols-4 gap-3">
+          {[1, 2, 3, 4].map(n => (
+            <div key={n} className="group space-y-2">
+              <div className="aspect-video bg-gray-900 rounded-xl overflow-hidden border border-white/[0.06] ring-1 ring-white/[0.04] group-hover:border-blue-500/40 transition-colors duration-200">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/pilates-pose-${n}.png`}
+                  alt={`Pose ${n}`}
+                  className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+                />
+              </div>
+              <p className="text-center text-xs text-gray-500 font-medium">Pose {n}</p>
             </div>
           ))}
         </div>
+
+        <div className="mt-5 bg-blue-950/30 border border-blue-500/20 rounded-xl p-4 text-sm text-blue-300/80 text-center leading-relaxed">
+          Las imágenes están cargadas. Para generar landmarks y ángulos reales,
+          procésalas en el <strong className="text-blue-300">Módulo de Lecciones</strong>.
+          El JSON resultante alimentará el <strong className="text-blue-300">Módulo de Alumnos</strong>.
+        </div>
       </section>
 
-      {/* Pipeline visual */}
-      <section className="container max-w-4xl mx-auto px-4 pb-20">
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 p-8">
-          <h3 className="text-lg font-bold text-center mb-6 text-gray-200">
-            Flujo de Evaluación
-          </h3>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center text-sm">
-            {[
-              { icon: '📸', label: 'Captura de Referencia', sub: 'Maestro graba pose' },
-              { icon: '🤖', label: 'MediaPipe Detecta', sub: '33 landmarks 3D' },
-              { icon: '📐', label: 'Cálculo de Ángulos', sub: '11 articulaciones' },
-              { icon: '⚡', label: 'Comparación Live', sub: '~35ms por frame' },
-              { icon: '🎯', label: 'Feedback Visual', sub: 'Verde/Amarillo/Rojo' },
-            ].map((item, i, arr) => (
-              <div key={i} className="flex items-center gap-3">
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-3xl">{item.icon}</span>
-                  <p className="font-medium text-white">{item.label}</p>
-                  <p className="text-gray-500 text-xs">{item.sub}</p>
-                </div>
-                {i < arr.length - 1 && (
-                  <span className="text-gray-600 text-xl hidden md:block">→</span>
-                )}
+      {/* ── Tarjetas de módulos ───────────────────────────────── */}
+      <section className="container max-w-5xl mx-auto px-4 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          {/* Módulo 1 */}
+          <Link
+            href="/training"
+            className="group flex flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-violet-500/30 p-6 transition-all duration-200 cursor-pointer"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
+                <Dumbbell className="w-5 h-5 text-violet-400" strokeWidth={1.5} />
               </div>
-            ))}
-          </div>
+              <div>
+                <p className="text-xs text-violet-400 font-semibold uppercase tracking-wider">Módulo 1</p>
+                <h3 className="text-lg font-bold text-white leading-tight">Lecciones — Instructor</h3>
+              </div>
+            </div>
+
+            <ul className="space-y-2 flex-1">
+              {MODULE1_FEATURES.map(f => (
+                <li key={f} className="flex items-start gap-2 text-sm text-gray-400">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-violet-400 mt-0.5 flex-shrink-0" strokeWidth={2} />
+                  {f}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex items-center gap-1.5 mt-5 text-sm text-violet-400 group-hover:text-violet-300 font-medium transition-colors duration-200">
+              Procesar las 4 imágenes de pilates
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
+            </div>
+          </Link>
+
+          {/* Módulo 2 */}
+          <Link
+            href="/evaluation"
+            className="group flex flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-blue-500/30 p-6 transition-all duration-200 cursor-pointer"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <Camera className="w-5 h-5 text-blue-400" strokeWidth={1.5} />
+              </div>
+              <div>
+                <p className="text-xs text-blue-400 font-semibold uppercase tracking-wider">Módulo 2</p>
+                <h3 className="text-lg font-bold text-white leading-tight">Evaluación — Alumno</h3>
+              </div>
+            </div>
+
+            <ul className="space-y-2 flex-1">
+              {MODULE2_FEATURES.map(f => (
+                <li key={f} className="flex items-start gap-2 text-sm text-gray-400">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 mt-0.5 flex-shrink-0" strokeWidth={2} />
+                  {f}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex items-center gap-1.5 mt-5 text-sm text-blue-400 group-hover:text-blue-300 font-medium transition-colors duration-200">
+              Probar con el ejercicio de demo
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
+            </div>
+          </Link>
         </div>
       </section>
     </div>

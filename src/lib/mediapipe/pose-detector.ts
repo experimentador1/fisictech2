@@ -96,16 +96,20 @@ export class PoseDetector {
   }
 
   // ============================================================
-  // Dibujo de landmarks en canvas
+  // Dibujo de landmarks en canvas (esqueleto AR)
   // ============================================================
 
+  /**
+   * jointColors: mapa de índice de landmark → color CSS.
+   * Si no se provee, usa colores por defecto.
+   */
   drawLandmarks(
     canvas: HTMLCanvasElement,
     video: HTMLVideoElement,
     landmarks: Landmark[][],
-    feedback?: Map<number, string>
+    jointColors?: Map<number, string>
   ): void {
-    if (!this.drawingUtils || !this._PoseLandmarker) return;
+    if (!this._PoseLandmarker) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -113,22 +117,67 @@ export class PoseDetector {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    const pl = this._PoseLandmarker as { POSE_CONNECTIONS: unknown };
-    const du = this.drawingUtils as {
-      drawLandmarks: (lms: Landmark[], opts: unknown) => void;
-      drawConnectors: (lms: Landmark[], conns: unknown, opts: unknown) => void;
+    const pl = this._PoseLandmarker as {
+      POSE_CONNECTIONS: Array<{ start: number; end: number }>;
     };
 
-    for (const lms of landmarks) {
-      du.drawConnectors(lms, pl.POSE_CONNECTIONS, {
-        color: 'rgba(255, 255, 255, 0.6)',
-        lineWidth: 2,
-      });
+    const W = canvas.width;
+    const H = canvas.height;
 
-      du.drawLandmarks(lms, {
-        radius: 4,
-        color: feedback ? '#00FF00' : '#FF0000',
-      });
+    for (const lms of landmarks) {
+      // ── Conexiones (líneas del esqueleto) ──────────────────
+      for (const conn of pl.POSE_CONNECTIONS) {
+        const a = lms[conn.start];
+        const b = lms[conn.end];
+        if (!a || !b) continue;
+        if ((a.visibility ?? 1) < 0.3 || (b.visibility ?? 1) < 0.3) continue;
+
+        const colorA = jointColors?.get(conn.start) ?? '#ffffff';
+        const colorB = jointColors?.get(conn.end)   ?? '#ffffff';
+
+        // Gradiente por segmento para transición de color entre articulaciones
+        const grad = ctx.createLinearGradient(a.x * W, a.y * H, b.x * W, b.y * H);
+        grad.addColorStop(0, colorA + 'cc');
+        grad.addColorStop(1, colorB + 'cc');
+
+        ctx.beginPath();
+        ctx.moveTo(a.x * W, a.y * H);
+        ctx.lineTo(b.x * W, b.y * H);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = 2.5;
+        ctx.shadowColor = colorA;
+        ctx.shadowBlur  = 6;
+        ctx.stroke();
+      }
+
+      ctx.shadowBlur = 0;
+
+      // ── Puntos de landmarks ────────────────────────────────
+      for (let i = 0; i < lms.length; i++) {
+        const lm = lms[i];
+        if (!lm || (lm.visibility ?? 1) < 0.3) continue;
+
+        const x     = lm.x * W;
+        const y     = lm.y * H;
+        const color = jointColors?.get(i) ?? '#ffffff';
+        const r     = i === 0 ? 6 : 4; // nariz ligeramente más grande
+
+        // Círculo exterior (glow)
+        ctx.beginPath();
+        ctx.arc(x, y, r + 2, 0, Math.PI * 2);
+        ctx.fillStyle = color + '33';
+        ctx.fill();
+
+        // Círculo interior
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur  = 8;
+        ctx.fill();
+      }
+
+      ctx.shadowBlur = 0;
     }
   }
 
@@ -136,23 +185,36 @@ export class PoseDetector {
   // Loop automático de detección
   // ============================================================
 
+  /**
+   * getJointColors: función llamada cada frame que devuelve un mapa
+   * de índice de landmark → color CSS según la evaluación en tiempo real.
+   */
   startLoop(
     video: HTMLVideoElement,
     canvas: HTMLCanvasElement,
-    callback?: DetectionCallback
+    callback?: DetectionCallback,
+    getJointColors?: () => Map<number, string>
   ): void {
     this.onDetection = callback ?? null;
     this.initializeDrawing(canvas);
 
     const loop = () => {
       const result = this.detectForVideo(video);
-      if (result && result.landmarks.length > 0) {
-        this.drawLandmarks(canvas, video, result.landmarks);
+
+      if (result === null) {
+        // Mismo frame de vídeo — no tocar el canvas para preservar el esqueleto AR previo
+      } else if (result.landmarks.length > 0) {
+        // Nueva detección con persona
+        const colors = getJointColors?.();
+        this.drawLandmarks(canvas, video, result.landmarks, colors);
         this.onDetection?.(result.landmarks, result.worldLandmarks);
       } else {
+        // Nuevo frame pero sin persona detectada — mostrar video limpio y notificar
         const ctx = canvas.getContext('2d');
         if (ctx) ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        this.onDetection?.([], []);
       }
+
       this.animationFrameId = requestAnimationFrame(loop);
     };
 

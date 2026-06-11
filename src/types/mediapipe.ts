@@ -177,12 +177,12 @@ export interface DetectorConfig {
 }
 
 export const DEFAULT_DETECTOR_CONFIG: DetectorConfig = {
-  modelVariant: 'full',
+  modelVariant: 'lite',   // más rápido y robusto con cuerpos parciales
   runningMode: 'VIDEO',
   numPoses: 1,
-  minPoseDetectionConfidence: 0.6,
-  minPosePresenceConfidence: 0.6,
-  minTrackingConfidence: 0.6,
+  minPoseDetectionConfidence: 0.35,  // umbral bajo para detectar incluso torso parcial
+  minPosePresenceConfidence: 0.35,
+  minTrackingConfidence: 0.35,
   useGpu: true,
 };
 
