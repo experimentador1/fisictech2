@@ -54,7 +54,7 @@ export interface ExercisePose {
 // Ejercicio completo
 // ============================================================
 
-export type ExerciseCategory = 'pilates' | 'yoga' | 'stretching' | 'rehabilitation' | 'strength';
+export type ExerciseCategory = 'pilates' | 'rehabilitation' | 'spinning';
 export type DifficultyLevel  = 'beginner' | 'intermediate' | 'advanced';
 
 export interface Exercise {

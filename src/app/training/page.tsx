@@ -30,12 +30,11 @@ interface UploadedImage {
 
 type Step = 'upload' | 'processing' | 'configure' | 'preview' | 'done';
 
-const CATEGORIES: ExerciseCategory[] = ['pilates', 'yoga', 'stretching', 'rehabilitation', 'strength'];
+const CATEGORIES: ExerciseCategory[] = ['pilates', 'rehabilitation', 'spinning'];
 const DIFFICULTIES: DifficultyLevel[] = ['beginner', 'intermediate', 'advanced'];
 
 const CAT_LABELS: Record<ExerciseCategory, string> = {
-  pilates: 'Pilates', yoga: 'Yoga', stretching: 'Estiramiento',
-  rehabilitation: 'Rehabilitación', strength: 'Fuerza',
+  pilates: 'Pilates', rehabilitation: 'Rehabilitación', spinning: 'Spinning',
 };
 const DIFF_LABELS: Record<DifficultyLevel, string> = {
   beginner: 'Principiante', intermediate: 'Intermedio', advanced: 'Avanzado',

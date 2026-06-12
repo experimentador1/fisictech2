@@ -188,7 +188,7 @@ export default function EvaluationPage() {
 
           {/* Filtros */}
           <div className="flex gap-2 mb-4 flex-wrap">
-            {['all', 'pilates', 'yoga', 'stretching', 'rehabilitation', 'strength'].map(cat => (
+            {['all', 'pilates', 'rehabilitation', 'spinning'].map(cat => (
               <button
                 key={cat}
                 onClick={() => setFilterCat(cat)}
